@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 register = template.Library()
 
+# I like it how you've extracted these to custom tags!
 
 # Takes a timdelta object and returns a string indicating how many
 # weeks, days, hours it is. Does not round, only truncates!

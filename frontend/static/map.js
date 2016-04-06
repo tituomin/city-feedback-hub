@@ -13,6 +13,12 @@ var userLocation = null;
 moment.locale('fi');
 
 $(document).ready(function() {
+    // Here I would just say
+    // params = {
+    //   start_date: start_date,
+    //   ...
+    // }
+
     var params = {};
     var start_date = moment().subtract(12, 'months').toISOString();
     params["start_date"] = start_date;
@@ -43,8 +49,8 @@ function getData(params, markersVisible, heatmapVisible, onSuccess) {
         $.each(data, function (key, feedback) {
 
             // specify popup options 
-            var customOptions =
-                {
+            var customOptions = // just name the variable "popupOptions" and you don't need the comment above.
+                { // see that the indentation styles are consistent for object literals {} etc.
                     'maxWidth': '300',
                     'className' : 'custom'
                 }
@@ -52,6 +58,10 @@ function getData(params, markersVisible, heatmapVisible, onSuccess) {
             // Generate popup-window content
             var popupContent = "";
 
+            // The Javascript portion doesn't contain very much dynamic HTML so you don't
+            // need to do this for now, but just a note for later projects:
+            // it's a good idea to use a JS templating library for
+            // these, for example https://github.com/borismoore/jsrender
             popupContent += "<h4 id=\"feedback_title\"></h4>" +
                 "<div id=\"feedback_service_name\"></div>" +
                 "<div id=\"feedback_requested_datetime\"></div>" +
@@ -73,12 +83,23 @@ function getData(params, markersVisible, heatmapVisible, onSuccess) {
             // On click, fill the popup with feedback details
             marker.on('click', function(e) {
                 // Truncate feedback details so that they fit the popup window
+
+                // Here and elsewhere: camelCase is customary for JavaScript variable and function
+                // names -- for API field data under_score is ok because the API uses underscores.
+                // The problem with these _ here is that when you use an external JavaScript library
+                // or even the standard library
+                // (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/prototype)
+                // you will use camelCase so you won't be consistent.
+                // It's okay to be inconsistent when comparing JS/Python portions of the code.
                 var title_len = 50;
                 var title = e.target.feedback.title;
                 if (title.length > title_len) {
                     title = title.substring(0, title_len) + "...";
                 }
 
+                // When using JS templating (see above) you can also simplify
+                // code like this (from here until the comment EOC).
+                // But this is ok for now.
                 $('#feedback_title').text(title);
                 $('.feedback_list_vote_badge').text(e.target.feedback.vote_counter);
                 $('.feedback_list_vote_icon').attr("id", e.target.feedback.service_request_id);
@@ -95,6 +116,7 @@ function getData(params, markersVisible, heatmapVisible, onSuccess) {
                 $('#feedback_details').text("Lisää");
                 $('#feedback_details').attr("href", feedback_url);
                 $('#feedback_info').css("visibility", "visible");
+                // EOC
             });
         });
     }).always(function() {
@@ -136,6 +158,11 @@ var crs = function() {
     return new L.Proj.CRS(crsName, projDef, crsOpts);
 }
 
+// I would avoid having much/any code at the top level of the
+// JavaScript file -- code that isn't enclosed in a function.
+// So you could extract some of the code below into a function
+// called "initializeMap" or something.
+
 var map = L.map('map', {
     crs: crs(),
     zoomControl: false,
@@ -176,6 +203,15 @@ function getUserLocation(e) {
                 userLocation.setLatLng(newLocation);
             }
             else {
+                // Leaflet has its own custom Class system (confusing, I know).
+                // For Leaflet class instantiation, you either do lowercase:
+                //   L.marker(...)
+                // or uppercase:
+                //   new L.Marker(...)
+                // -- don't mix "new" and lowercase
+                // see http://leafletjs.com/reference.html#class and "Class Factories"
+                // for details. New JavaScript versions have a standard class
+                // system, removing the need for every library to implement their own.
                 userLocation = new L.marker(newLocation, {icon: center_icon}).addTo(map);
             }
             map.panTo(newLocation);

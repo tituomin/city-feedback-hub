@@ -200,8 +200,8 @@ class FeedbackWizard(SessionWizardView):
         if self.steps.current == 'closest':
             closest = get_feedbacks(
                     statuses='Open',
-                    lat=60.17067,
-                    lon=24.94152,
+                    lat=60.17067, # These are Helsinki specific, right?
+                    lon=24.94152, # Move to settings.DEFAULT_GEOLOCATION or somtehing
                     radius=3000,
                     order_by='distance')[:10]
             form_id = uuid.uuid4().hex
@@ -234,6 +234,22 @@ class FeedbackWizard(SessionWizardView):
         return context
 
     def done(self, form_list, form_dict, **kwargs):
+        # Just a small thing, but you could save a lot of typing by
+        # just using a dict literal below. That is, instead of the empty
+        #
+        # data = {}
+        #
+        # just include all the known data points directly in the original
+        # initialization:
+        # data = {
+        #     'status': 'moderation',
+        #     'title': ...
+        #     ...
+        # }
+        #
+        # At least I find it a lot more readable.
+        # You can still put in the optional data using the data[key] = value syntax.
+        #
         data = {}
         data["status"] = "moderation"
         data["title"] = form_dict["basic_info"].cleaned_data["title"]
@@ -281,7 +297,7 @@ class FeedbackWizard(SessionWizardView):
 def media_upload(request):
     form_id = request.POST["form_id"]
     action = request.POST["action"]
-    print("form_id", form_id)
+    print("form_id", form_id) # remove
     if action == "upload_file":
         files = request.FILES.getlist("file")
         if files:

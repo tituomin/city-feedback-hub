@@ -13,12 +13,14 @@ class FeedbackFormCategory(forms.Form):
             attrs={'class': 'form-control', 'placeholder': "Enter category..."}))
 
 
-class FeedbackForm3(forms.Form):
+class FeedbackForm3(forms.Form): # The 3 is not needed I believe :)
     title = forms.CharField(max_length=100,
                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': "Anna otsikko..."}))
     description = forms.CharField(widget=forms.Textarea(
         attrs={'rows': 8, 'maxlength': 5000, 'class': 'form-control', 'placeholder': "Kirjoita tarkka kuvaus..."}))
 
+
+# In the end, remove commented out code like below.
 
 # form_id = forms.CharField(required=False, max_length=50, widget=forms.HiddenInput())
 

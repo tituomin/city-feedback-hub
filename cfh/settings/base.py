@@ -134,6 +134,14 @@ MEDIA_URL = "/media/"
 DATETIME_FORMAT = "j.n.Y - G:i"
 DATE_FORMAT = "j.n.Y"
 
+# The setting below isn't used anywhere..
+# If you're still planning to take it into use,
+# maybe make it a bit more generic, like
+# EXTENDED_FEATURES = ['Helsinki']
+# or DEPLOYMENT_SITE = 'Helsinki'
+# (So that it could be used to handle
+#  other possible variations for other cities
+#  in the future).
 ALLOW_HELSINKI_SPECIFIC_FEATURES = True
 
 # limit amount of feedback list items if date filters are not provided
@@ -145,6 +153,9 @@ OPEN311_SERVICE_URL = "https://asiointi.hel.fi/palautews/rest/v1/services.json?l
 SYNCHRONIZATION_START_DATETIME = '2014-09-07T00:00:00'
 OPEN311_FEEDBACKS_PER_RESPONSE_LIMIT = 500
 OPEN311_RANGE_LIMIT_DAYS = 90
+
+# This is the test API key so not a big problem, but move it to os.environ like the others.
+# The production key will have to be hidden.
 OPEN311_API_KEY = 'f1301b1ded935eabc5faa6a2ce975f6'
 
 # synchronize all new feedbacks with Open311 immediately

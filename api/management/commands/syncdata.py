@@ -27,6 +27,7 @@ def get_existing_feedback(service_request_id):
 @transaction.atomic
 def save_feedback(f):
     existing_feedback = get_existing_feedback(f['service_request_id'])
+    # Maybe just say Feedback(**f) or the like?
     updated_feedback = Feedback(
             service_request_id=f['service_request_id'],
             status_notes=f.get('status_notes', ''),
